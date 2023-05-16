@@ -1,11 +1,12 @@
 package com.java.spring.books.dto.request;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class BookRequest {
 
-  private int id;
   private String title;
   private String author;
   private String category;
