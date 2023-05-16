@@ -1,8 +1,10 @@
 package com.java.spring.books.service.impl;
 
+import com.java.spring.books.dto.request.BookRequest;
+import com.java.spring.books.dto.response.BookResponse;
 import com.java.spring.books.entity.Book;
-import com.java.spring.books.repository.IBookRepository;
-import com.java.spring.books.service.IBookService;
+import com.java.spring.books.repository.BookRepository;
+import com.java.spring.books.service.BookService;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,40 +12,46 @@ import org.springframework.stereotype.Service;
 
 @Service
 
-public class BookImpl implements IBookService {
+public class BookImpl implements BookService {
 
   @Autowired
-  private IBookRepository bookRepository;
+  private BookRepository bookRepository;
 
   @Override
-  public Book create(Book book) {
-    return bookRepository.save(book);
+  public BookResponse create(BookRequest request) {
+    // create book entity from request
+    Book book = Book.from(request);
+    // save book into db
+    book = bookRepository.save(book);
+    // create book response from book entity
+    BookResponse response = new BookResponse();
+    response.setId(book.getId());
+    response.setTitle(book.getTitle());
+    response.setAuthor(book.getAuthor());
+    response.setCategory(book.getCategory());
+    response.setPublisher(book.getPublisher());
+    response.setPublishTime(book.getPublishTime());
+    // return book response
+    return response;
   }
 
   @Override
   public List<Book> getAll() {
-    return bookRepository.findAll();
+    return null;
   }
 
   @Override
   public Book getOneById(Long id) {
-    Optional<Book> book = bookRepository.findById(id);
-    return book.get();
+    return null;
   }
 
   @Override
   public Book update(Book book) {
-    Book existBook = bookRepository.findById(book.getId()).get();
-    existBook.setTitle(book.getTitle());
-    existBook.setAuthor(book.getAuthor());
-    existBook.setCategory(book.getCategory());
-    existBook.setPublisher(book.getPublisher());
-    existBook.setPublishTime(book.getPublishTime());
-    return bookRepository.save(existBook);
+    return null;
   }
 
   @Override
   public void delete(Long id) {
-    bookRepository.deleteById(id);
+
   }
 }
