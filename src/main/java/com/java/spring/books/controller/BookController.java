@@ -9,8 +9,8 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import org.aibles.header.dto.Payload;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,28 +41,32 @@ public class BookController {
   }
 
   @GetMapping
-
-  public ResponseEntity<List<Book>> getAll() {
-    List<Book> books = bookService.getAll();
-    return new ResponseEntity<>(books, HttpStatus.OK);
+  @ResponseStatus(HttpStatus.OK)
+  public List<BookResponse> getAll() {
+    return bookService.getAll();
   }
 
   @GetMapping("{id}")
-  public ResponseEntity<Book> getOneById(@PathVariable("id") Long id) {
-    Book book = bookService.getOneById(id);
-    return new ResponseEntity<>(book, HttpStatus.OK);
+  @ResponseStatus(HttpStatus.OK)
+  public BookResponse getOneById(@PathVariable("id") Long id) {
+    return bookService.getOneById(id);
   }
 
   @PutMapping("{id}")
-  public ResponseEntity<Book> update(@PathVariable("id") Long id, @RequestBody Book book) {
-    Book existBook = bookService.getOneById(id);
-    bookService.update(book);
-    return new ResponseEntity<>(book, HttpStatus.OK);
+  @ResponseStatus(HttpStatus.OK)
+  public BookResponse update(@RequestBody BookRequest request, @PathVariable("id") Long id) {
+    return bookService.update(request, id);
   }
 
-  @DeleteMapping("{id}")
-  public ResponseEntity<Book> delete(@PathVariable("id") Long id) {
-    bookService.delete(id);
-    return new ResponseEntity<>(HttpStatus.OK);
+  @DeleteMapping("/{id}")
+  @ResponseStatus(HttpStatus.OK)
+  public void delete(@PathVariable("id") Long id) {
+    bookService.deleteById(id);
+  }
+
+  @RequestMapping("/{pageNumber}/{pageSize}")
+  public Page<Book> bookPagination(@PathVariable Integer pageNumber,
+      @PathVariable Integer pageSize) {
+    return bookService.getBookPagination(pageNumber, pageSize);
   }
 }

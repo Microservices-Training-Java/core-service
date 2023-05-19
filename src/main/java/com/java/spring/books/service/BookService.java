@@ -4,19 +4,19 @@ import com.java.spring.books.dto.request.BookRequest;
 import com.java.spring.books.dto.response.BookResponse;
 import com.java.spring.books.entity.Book;
 import java.util.List;
-
+import org.springframework.data.domain.Page;
 
 public interface BookService {
 
- BookResponse create(BookRequest request);
- //TODO: create book entity from request. Then convert book entity to book response
+  BookResponse create(BookRequest request);
 
-  List<Book> getAll();
+  List<BookResponse> getAll();
 
-  Book getOneById(Long id);
+  BookResponse getOneById(Long id);
 
-  Book update(Book book);
+  BookResponse update(BookRequest request, long id);
 
-  void delete(Long id);
+  void deleteById(long id);
 
+  Page<Book> getBookPagination(Integer pageNumber, Integer pageSize);
 }
