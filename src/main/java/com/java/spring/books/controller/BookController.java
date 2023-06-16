@@ -7,6 +7,7 @@ import com.java.spring.books.repository.BookRepository;
 import com.java.spring.books.service.BookService;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.aibles.header.dto.Payload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,17 +27,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/books")
-
+@Slf4j
 public class BookController {
 
   @Autowired
   private BookService bookService;
   @Autowired
   private BookRepository bookRepository;
+  @Autowired
+  private Payload payload;
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public BookResponse create(@Validated @RequestBody BookRequest request, @RequestHeader Payload payload) {
+  public BookResponse create(@Validated @RequestBody BookRequest request) {
+    log.info("(create) payload: {}", payload.toString() );
     return bookService.create(request);
   }
 

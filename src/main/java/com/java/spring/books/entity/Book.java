@@ -6,14 +6,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import java.util.UUID;
 
 @Entity
 @Table(name = "books")
 public class Book {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String id;
   @Column(nullable = false)
   private String title;
@@ -25,6 +26,11 @@ public class Book {
   private String publisher;
   @Column
   private Long publishTime;
+
+  @PrePersist
+  private void prePersistId() {
+    this.id = this.id == null ? UUID.randomUUID().toString() : this.id;
+  }
 
   public Book() {
   }
